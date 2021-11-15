@@ -1,0 +1,521 @@
+/*------------------------------------*\
+    
+  $CUSTOM PROPERTIES / VARIABLES
+
+\*------------------------------------*/
+:root {
+  --black: #000;
+  --white: #fff;
+  --color-1: #bada55;
+  
+  --gutter: 3rem;
+  
+  /*------------------------------------*\ 
+    navbar settings 
+  \*------------------------------------*/
+  --bar-width: 1em;
+  --bar-height: .15em;
+  --bar-margin: .08em;
+  --bar-borderradius: 0.1em;
+  
+  /* arrow angle from 0 - 90 */
+  --bar-arrow-angle-value: 45; 
+
+  --bar-transition: cubic-bezier(.25,.01,.75,1);
+  --bar-transition-time: .3s;
+  
+  /*------------------------------------*\ 
+    navbar calculations
+  \*------------------------------------*/
+  /* flexbox prevents margin collapse, so add that margin twice*/
+  --bar-offset: calc( var(--bar-height) + var(--bar-margin) * 2 );   
+  /* arrow angle */
+  --bar-arrow-angle: calc( var(--bar-arrow-angle-value) * 1deg );
+  /* offset of arrows so that they align perfectly */
+  --bar-arrow-offset: calc( var(--bar-height) * 1.2 + var(--bar-margin) * 2 );
+  /* center arrow to label without middle line */
+  --bar-arrow-offsetcenter: calc( 50% * var(--bar-arrow-angle-value) / 90 );
+}
+
+/*------------------------------------*\
+
+  $TUTORIAL ESSENTIAL
+
+\*------------------------------------*/
+
+/* hide input */
+.burger__input {
+    display: none;
+}
+
+.burger__label {
+  display: none; /* if you don't want to show this for the desktop version */
+  align-items: center;
+  /* put Burger on top of navigation*/
+  position: relative;
+  z-index: 11000;
+  
+  padding: calc(var(--gutter) * .5);  
+  background-color: var(--white);
+
+  cursor: pointer;
+}
+
+/* put this part into a media query, when to show the nav */
+.burger__label {
+  display: flex;
+}
+
+.burger__label > * {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
+/*------------------------------------*\
+  $FONT AWESOME
+\*------------------------------------*/
+.burger__input:checked ~ .burger__label i:before {
+    content: '\f00d'; /* change font awesome icon to times symbol */
+}
+
+/*------------------------------------*\
+  $CUSTOM LINES
+\*------------------------------------*/
+.burger__lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  
+  transition: transform var(--bar-transition-time) var(--bar-transition);
+}
+
+.burger__line {
+  display: block;
+
+  width: var(--bar-width);
+  height: var(--bar-height);
+
+  margin-top: var(--bar-margin);
+  margin-bottom: var(--bar-margin);
+  border-radius: var(--bar-borderradius);
+
+  background-color: var(--black);
+  
+  transition: all var(--bar-transition-time) var(--bar-transition);
+}
+
+/*------------------------------------*\
+  $CROSS
+\*------------------------------------*/
+/*line-middle*/
+.burger__input:checked ~ .burger__label--cross .burger__line:nth-child(2) {
+  opacity: 0;
+}
+
+/* top line */
+.burger__input:checked ~ .burger__label--cross .burger__line:nth-child(1) {
+  transform: translateY(var(--bar-offset)) rotate(var(--bar-arrow-angle));
+}
+
+/* bottom line */
+.burger__input:checked ~ .burger__label--cross .burger__line:nth-child(3) {
+  transform: translateY( calc( var(--bar-offset) * -1 ) ) rotate(calc( var(--bar-arrow-angle) * -1 ));
+}
+
+/*------------------------------------*\
+  $ONE LINE
+\*------------------------------------*/
+.burger__input:checked ~ .burger__label--oneline .burger__line:nth-child(1) {
+  transform: translateY( var(--bar-offset) );
+}
+
+.burger__input:checked ~ .burger__label--oneline .burger__line:nth-child(3) {
+  transform: translateY( calc( var(--bar-offset) * -1 ) );
+}
+
+/*------------------------------------*\
+  $ONE LINE FADE
+\*------------------------------------*/
+.burger__input:checked ~ .burger__label--onelinefade .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--onelinefade .burger__line:nth-child(3){
+  opacity: 0;  
+}
+
+.burger__input:checked ~ .burger__label--onelinefade .burger__line:nth-child(1) {
+  transform: translateX( -25% );
+}
+
+.burger__input:checked ~ .burger__label--onelinefade .burger__line:nth-child(3) {
+  transform: translateX( 25% );
+}
+
+/*------------------------------------*\
+  $ARROW LEFT
+\*------------------------------------*/
+.burger__label--arrowleft .burger__line:nth-child(1) {
+    transform-origin: 0 calc(var(--bar-height));
+}
+
+.burger__label--arrowleft .burger__line:nth-child(3) {
+    transform-origin: 0 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(1) {
+  transform: 
+    translateY(var(--bar-arrow-offset)) 
+    rotate(calc( var(--bar-arrow-angle) * -1 ))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(3) {
+  transform: 
+    translateY(calc( var(--bar-arrow-offset) * -1 ))
+    rotate(var(--bar-arrow-angle))
+
+  ;
+}
+
+/* shorten first and last line and position them correctly */
+.burger__label--arrowleft .burger__lines {
+  align-items: flex-start;
+}
+
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(3){
+  width: calc( var(--bar-width) * 1 );
+}
+
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--arrowleft .burger__line:nth-child(3){
+  width: calc( var(--bar-width) * .75 );
+}
+
+/*------------------------------------*\
+  $ARROW RIGHT
+\*------------------------------------*/
+.burger__label--arrowright .burger__line:nth-child(1) {
+    transform-origin: 100% calc(var(--bar-height));
+}
+
+.burger__label--arrowright .burger__line:nth-child(3) {
+    transform-origin: 100% 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowright .burger__line:nth-child(1) {
+  transform: 
+    translateY(var(--bar-arrow-offset))
+    rotate(var(--bar-arrow-angle))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowright .burger__line:nth-child(3) {
+  transform: 
+    translateY(calc( var(--bar-arrow-offset) * -1 ))
+    rotate(calc( var(--bar-arrow-angle) * -1 ))
+  ;
+}
+
+/* shorten first and last line and position them correctly */
+.burger__label--arrowright .burger__lines {
+  align-items: flex-end;
+}
+
+.burger__input:checked ~ .burger__label--arrowright .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--arrowright .burger__line:nth-child(3){
+  width: calc( var(--bar-width) * .75 );
+}
+
+/*------------------------------------*\
+  $BURGER ROTATE
+\*------------------------------------*/
+.burger__input:checked ~ .burger__label--rotate .burger__lines {
+  transform: rotate(90deg);
+}
+
+.burger__input:checked ~ .burger__label--rotate .burger__line:nth-child(1) {
+  width: calc(var(--bar-width) * .5);
+}
+
+.burger__input:checked ~ .burger__label--rotate .burger__line:nth-child(2) {
+  width: calc(var(--bar-width) * .75);
+}
+
+/*------------------------------------*\
+  $ARROW DOWN
+\*------------------------------------*/
+.burger__label--arrowdown .burger__lines {
+  align-items: flex-end;
+}
+
+.burger__label--arrowdown .burger__line:nth-child(1) {
+    transform-origin: 100% calc(var(--bar-height));
+}
+
+.burger__label--arrowdown .burger__line:nth-child(3) {
+    transform-origin: 100% 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowdown .burger__line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowdown .burger__line:nth-child(1) {
+  transform: 
+    translateY(var(--bar-arrow-offset))
+    rotate(var(--bar-arrow-angle))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowdown .burger__line:nth-child(3) {
+  transform: 
+    translateY(calc( var(--bar-arrow-offset) * -1 ))
+    rotate(calc( var(--bar-arrow-angle) * -1))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowdown .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--arrowdown .burger__line:nth-child(3){
+  width: calc(var(--bar-width) * .75);
+}
+
+.burger__input:checked ~ .burger__label--arrowdown .burger__lines {
+  transform:
+    translateY(calc( var(--bar-arrow-offsetcenter) * -1 ))
+    rotate(90deg) 
+  ;
+}
+
+/*------------------------------------*\
+  $ARROW UP
+\*------------------------------------*/
+.burger__label--arrowup .burger__lines {
+  align-items: flex-end;
+}
+
+.burger__label--arrowup .burger__line:nth-child(1) {
+    transform-origin: 100% calc(var(--bar-height));
+}
+
+.burger__label--arrowup .burger__line:nth-child(3) {
+    transform-origin: 100% 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowup .burger__line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger__input:checked ~ .burger__label--arrowup .burger__line:nth-child(1) {
+  transform: 
+    translateY(var(--bar-arrow-offset))
+    rotate(var(--bar-arrow-angle))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowup .burger__line:nth-child(3) {
+  transform: 
+    translateY(calc( var(--bar-arrow-offset) * -1))
+    rotate(calc( var(--bar-arrow-angle) * -1 ))
+  ;
+}
+
+.burger__input:checked ~ .burger__label--arrowup .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--arrowup .burger__line:nth-child(3){
+  width: calc(var(--bar-width) * .75);
+}
+
+.burger__input:checked ~ .burger__label--arrowup .burger__lines {
+  transform: 
+    translateY(calc( var(--bar-width) * .25 ))
+    rotate(-90deg) 
+  ;
+}
+
+
+/*------------------------------------*\
+  $ROTATE PLUS
+\*------------------------------------*/
+.burger__label--plus .burger__line:nth-child(2) {
+  transition: opacity var(--bar-transition-time) var(--bar-transition);
+}
+
+.burger__input:checked ~ .burger__label--plus .burger__line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger__input:checked ~ .burger__label--plus .burger__line:nth-child(1) {
+  transform: translateY( var(--bar-offset) );
+}
+
+.burger__input:checked ~ .burger__label--plus .burger__line:nth-child(3){
+  transform: 
+    translateY(calc( var(--bar-offset) * -1 ))
+    rotate(90deg)
+  ;
+}
+
+/*------------------------------------*\
+  $ROTATE CROSS
+\*------------------------------------*/
+/* animate back to inactive */
+.burger__label--rotatecross .burger__line:nth-child(2) {
+  transition: width var(--bar-transition-time) var(--bar-transition);
+  transition-delay: calc( var(--bar-transition-time) * 2);
+}
+
+.burger__label--rotatecross .burger__line:nth-child(1),
+.burger__label--rotatecross .burger__line:nth-child(3) {
+  transition-delay: var(--bar-transition-time);
+}
+
+/* animate to active state */
+
+/* step 1 - middle line width to zero */
+.burger__input:checked ~ .burger__label--rotatecross .burger__line:nth-child(2) {
+  width: 0;
+  transition-delay: calc( var(--bar-transition-time) * 0);
+}
+
+/* step 2 - make a cross */
+.burger__input:checked ~ .burger__label--rotatecross .burger__line:nth-child(1),
+.burger__input:checked ~ .burger__label--rotatecross .burger__line:nth-child(3) {
+  transition-delay: var(--bar-transition-time);
+}
+
+.burger__input:checked ~ .burger__label--rotatecross .burger__line:nth-child(1) {
+  transform: translateY( var(--bar-offset) );
+}
+
+.burger__input:checked ~ .burger__label--rotatecross .burger__line:nth-child(3){
+  transform: 
+    translateY(calc( var(--bar-offset) * -1 ))
+    rotate(90deg)
+  ;
+}
+
+/* step 3 - rotate everything */
+.burger__input:checked ~ .burger__label--rotatecross .burger__lines {
+  transition: all var(--bar-transition-time) var(--bar-transition);
+  transition-delay: calc( var(--bar-transition-time) * 2 );
+  transform: rotate(var(--bar-arrow-angle));
+}
+
+/*------------------------------------*\
+  $BURGER ROTATE HALF
+\*------------------------------------*/
+.burger__label--rotatehalf .burger__lines {
+  align-items: flex-start;
+}
+
+.burger__label--rotatehalf .burger__line {
+  transform-origin: 0 0;
+}
+
+.burger__input:checked ~ .burger__label--rotatehalf .burger__lines {
+  transform: rotate(30deg);
+}
+
+.burger__input:checked ~ .burger__label--rotatehalf .burger__line:nth-child(1) {
+  width: calc(var(--bar-width) * .5);
+}
+
+.burger__input:checked ~ .burger__label--rotatehalf .burger__line:nth-child(2) {
+  width: calc(var(--bar-width) * .75);
+}
+
+
+
+/*------------------------------------*\
+    
+  $END TUTORIAL ESSENTIAL
+
+\*------------------------------------*/
+
+
+
+/*------------------------------------*\
+    
+  $CUSTOM STYLING
+
+\*------------------------------------*/
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+img {
+  vertical-align: bottom;
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  font-size: 1.8rem;
+}
+
+/* sticky footer */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+/*------------------------------------*\
+  $FOOTER
+\*------------------------------------*/
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+ 
+  padding: calc(var(--gutter) * .5);
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__item{
+  flex-grow: 1;
+}
+
+.footer__item:first-child{
+  flex-grow: 9999;
+}
+
+/*------------------------------------*\
+    $GLOBAL CLASSES
+\*------------------------------------*/
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  
+  background-color: var(--color-1);
+}
+
+/*------------------------------------*\
+    $SECTIONS
+\*------------------------------------*/
+.section__content {  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.section__content > * {
+  font-size: 1.8em;
+  margin: calc(var(--gutter) * .5);
+}
