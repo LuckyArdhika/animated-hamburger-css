@@ -1,2 +1,1 @@
-# animated-hamburger-css
-Snippet for animated hamburger css (toggle)
+# Snippet for frontend dev
